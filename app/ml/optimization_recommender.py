@@ -167,6 +167,15 @@ class OptimizationRecommender:
         Returns:
             Training metrics
         """
+        # Check minimum sample requirement
+        min_samples = 5
+        if len(queries) < min_samples:
+            raise ValueError(
+                f"Insufficient training data: {len(queries)} samples provided, "
+                f"but at least {min_samples} are required. "
+                "Add more optimization results to train the recommender model."
+            )
+        
         # Extract features
         X, _ = self.feature_extractor.extract_batch(queries)
         
@@ -174,6 +183,14 @@ class OptimizationRecommender:
         y = self.label_binarizer.fit_transform([
             [opt.value for opt in opts] for opts in applied_optimizations
         ])
+        
+        # Check if there are any valid labels
+        if y.shape[1] == 0:
+            raise ValueError(
+                "No valid optimization labels found in training data. "
+                "Ensure optimization_rules_applied contains valid OptimizationType values: "
+                f"{[e.value for e in OptimizationType]}"
+            )
         
         # Scale features
         X_scaled = self.scaler.fit_transform(X)

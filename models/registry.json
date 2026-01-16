@@ -101,6 +101,528 @@
         }
       },
       "feature_count": 46,
+      "is_active": false
+    },
+    "classifier_20260119_144203": {
+      "model_id": "classifier_20260119_144203",
+      "model_type": "classifier",
+      "version": "1.0.0",
+      "trained_at": "2026-01-19T14:42:03.580874",
+      "training_samples": 6,
+      "metrics": {
+        "category_accuracy": 1.0,
+        "priority_accuracy": 1.0,
+        "category_report": {
+          "complex": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 0.0
+          },
+          "moderate": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 2.0
+          },
+          "accuracy": 1.0,
+          "macro avg": {
+            "precision": 0.5,
+            "recall": 0.5,
+            "f1-score": 0.5,
+            "support": 2.0
+          },
+          "weighted avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 2.0
+          }
+        },
+        "priority_report": {
+          "medium": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 2.0
+          },
+          "accuracy": 1.0,
+          "macro avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 2.0
+          },
+          "weighted avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 2.0
+          }
+        },
+        "feature_importance": {
+          "table_count": 0.0,
+          "column_count": 0.0,
+          "join_count": 0.0,
+          "inner_join_count": 0.0,
+          "left_join_count": 0.0,
+          "right_join_count": 0.0,
+          "cross_join_count": 0.0,
+          "where_condition_count": 0.0,
+          "and_count": 0.0,
+          "or_count": 0.0,
+          "order_by_count": 0.0,
+          "group_by_count": 0.0,
+          "has_subquery": 0.0,
+          "subquery_depth": 0.0,
+          "has_aggregation": 0.0,
+          "aggregation_count": 0.0,
+          "has_window_function": 0.0,
+          "window_function_count": 0.0,
+          "has_distinct": 0.0,
+          "has_limit": 0.0,
+          "has_offset": 0.0,
+          "has_union": 0.0,
+          "has_case_when": 0.0,
+          "has_cte": 0.0,
+          "has_select_star": 0.0,
+          "has_not_in": 0.0,
+          "has_not_exists": 0.0,
+          "has_like_wildcard": 0.0,
+          "has_leading_wildcard": 0.0,
+          "has_or_condition": 0.0,
+          "has_in_clause": 0.0,
+          "has_between": 0.0,
+          "has_is_null": 0.0,
+          "has_function_in_where": 0.0,
+          "has_implicit_join": 0.0,
+          "query_length": 0.0,
+          "token_count": 0.0,
+          "keyword_count": 0.0,
+          "identifier_count": 0.0,
+          "literal_count": 0.0,
+          "operator_count": 0.0,
+          "parenthesis_depth": 0.0,
+          "avg_identifier_length": 0.0,
+          "estimated_complexity_score": 0.0,
+          "join_complexity_score": 0.0,
+          "predicate_complexity_score": 0.0
+        }
+      },
+      "feature_count": 46,
+      "is_active": false
+    },
+    "classifier_20260119_160558": {
+      "model_id": "classifier_20260119_160558",
+      "model_type": "classifier",
+      "version": "1.0.0",
+      "trained_at": "2026-01-19T16:05:58.086465",
+      "training_samples": 46,
+      "metrics": {
+        "category_accuracy": 0.6,
+        "priority_accuracy": 1.0,
+        "category_report": {
+          "complex": {
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1-score": 0.6666666666666666,
+            "support": 2.0
+          },
+          "moderate": {
+            "precision": 0.5555555555555556,
+            "recall": 1.0,
+            "f1-score": 0.7142857142857143,
+            "support": 5.0
+          },
+          "simple": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 2.0
+          },
+          "very_complex": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 1.0
+          },
+          "accuracy": 0.6,
+          "macro avg": {
+            "precision": 0.3888888888888889,
+            "recall": 0.375,
+            "f1-score": 0.34523809523809523,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 0.47777777777777775,
+            "recall": 0.6,
+            "f1-score": 0.4904761904761905,
+            "support": 10.0
+          }
+        },
+        "priority_report": {
+          "medium": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "accuracy": 1.0,
+          "macro avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          }
+        },
+        "feature_importance": {
+          "table_count": 0.07063425139484131,
+          "column_count": 0.025414227956578193,
+          "join_count": 0.0,
+          "inner_join_count": 0.005850266480721749,
+          "left_join_count": 0.01013046569188055,
+          "right_join_count": 0.0,
+          "cross_join_count": 0.0,
+          "where_condition_count": 0.022487775115522444,
+          "and_count": 0.007633164513251012,
+          "or_count": 0.0,
+          "order_by_count": 0.025527108269953126,
+          "group_by_count": 0.009656778260030629,
+          "has_subquery": 0.07319343751548275,
+          "subquery_depth": 0.0770164397849155,
+          "has_aggregation": 0.009742550669883495,
+          "aggregation_count": 0.015913527001815655,
+          "has_window_function": 0.0017114624505928868,
+          "window_function_count": 0.001541162699960982,
+          "has_distinct": 0.0023437770095073485,
+          "has_limit": 0.0,
+          "has_offset": 0.0,
+          "has_union": 0.000509754562617999,
+          "has_case_when": 0.0,
+          "has_cte": 0.004324823798248996,
+          "has_select_star": 0.008518228615812785,
+          "has_not_in": 0.0,
+          "has_not_exists": 0.0,
+          "has_like_wildcard": 0.0,
+          "has_leading_wildcard": 0.0,
+          "has_or_condition": 0.0,
+          "has_in_clause": 0.015079079222845626,
+          "has_between": 0.0,
+          "has_is_null": 0.0,
+          "has_function_in_where": 0.0,
+          "has_implicit_join": 0.0,
+          "query_length": 0.05198588418439165,
+          "token_count": 0.0515847908181333,
+          "keyword_count": 0.1041144000029487,
+          "identifier_count": 0.03329882451585456,
+          "literal_count": 0.02421312696175355,
+          "operator_count": 0.040106996220772684,
+          "parenthesis_depth": 0.051048428349497646,
+          "avg_identifier_length": 0.06317025794488479,
+          "estimated_complexity_score": 0.1653525513445825,
+          "join_complexity_score": 0.0,
+          "predicate_complexity_score": 0.02789645864271777
+        }
+      },
+      "feature_count": 46,
+      "is_active": false
+    },
+    "classifier_20260120_120814": {
+      "model_id": "classifier_20260120_120814",
+      "model_type": "classifier",
+      "version": "1.0.0",
+      "trained_at": "2026-01-20T12:08:14.611501",
+      "training_samples": 46,
+      "metrics": {
+        "category_accuracy": 0.5,
+        "priority_accuracy": 1.0,
+        "category_report": {
+          "complex": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 2.0
+          },
+          "moderate": {
+            "precision": 0.625,
+            "recall": 0.8333333333333334,
+            "f1-score": 0.7142857142857143,
+            "support": 6.0
+          },
+          "simple": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 1.0
+          },
+          "very_complex": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 1.0
+          },
+          "accuracy": 0.5,
+          "macro avg": {
+            "precision": 0.15625,
+            "recall": 0.20833333333333334,
+            "f1-score": 0.17857142857142858,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 0.375,
+            "recall": 0.5,
+            "f1-score": 0.42857142857142855,
+            "support": 10.0
+          }
+        },
+        "priority_report": {
+          "medium": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "accuracy": 1.0,
+          "macro avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          }
+        },
+        "feature_importance": {
+          "table_count": 0.061060280161686686,
+          "column_count": 0.02386512542672842,
+          "join_count": 0.0,
+          "inner_join_count": 0.0030735509926542123,
+          "left_join_count": 0.002928129582025169,
+          "right_join_count": 0.0,
+          "cross_join_count": 0.0,
+          "where_condition_count": 0.027502136689632653,
+          "and_count": 0.005698390474631303,
+          "or_count": 0.0,
+          "order_by_count": 0.009316086997698373,
+          "group_by_count": 0.0076133508681055844,
+          "has_subquery": 0.08406231080525085,
+          "subquery_depth": 0.09509835691449124,
+          "has_aggregation": 0.010832932665979764,
+          "aggregation_count": 0.019869252524652804,
+          "has_window_function": 0.00985817346529315,
+          "window_function_count": 0.014867266826569046,
+          "has_distinct": 0.008525934115271987,
+          "has_limit": 0.0,
+          "has_offset": 0.0,
+          "has_union": 0.0,
+          "has_case_when": 0.0,
+          "has_cte": 0.0,
+          "has_select_star": 0.006398939002129999,
+          "has_not_in": 0.0,
+          "has_not_exists": 0.0,
+          "has_like_wildcard": 0.00047658852487170844,
+          "has_leading_wildcard": 0.0,
+          "has_or_condition": 0.0,
+          "has_in_clause": 0.049429136606945055,
+          "has_between": 0.0,
+          "has_is_null": 0.0,
+          "has_function_in_where": 0.0,
+          "has_implicit_join": 0.0,
+          "query_length": 0.05794707511130731,
+          "token_count": 0.0299491956647549,
+          "keyword_count": 0.08125328189321018,
+          "identifier_count": 0.03134887112631976,
+          "literal_count": 0.027731116176604377,
+          "operator_count": 0.02916538370124478,
+          "parenthesis_depth": 0.027747706514995744,
+          "avg_identifier_length": 0.04738423080819222,
+          "estimated_complexity_score": 0.180563643804562,
+          "join_complexity_score": 0.0,
+          "predicate_complexity_score": 0.046433552554190585
+        }
+      },
+      "feature_count": 46,
+      "is_active": false
+    },
+    "classifier_20260120_120825": {
+      "model_id": "classifier_20260120_120825",
+      "model_type": "classifier",
+      "version": "1.0.0",
+      "trained_at": "2026-01-20T12:08:25.239576",
+      "training_samples": 46,
+      "metrics": {
+        "category_accuracy": 0.5,
+        "priority_accuracy": 1.0,
+        "category_report": {
+          "complex": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 2.0
+          },
+          "moderate": {
+            "precision": 0.625,
+            "recall": 0.8333333333333334,
+            "f1-score": 0.7142857142857143,
+            "support": 6.0
+          },
+          "simple": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 1.0
+          },
+          "very_complex": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 1.0
+          },
+          "accuracy": 0.5,
+          "macro avg": {
+            "precision": 0.15625,
+            "recall": 0.20833333333333334,
+            "f1-score": 0.17857142857142858,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 0.375,
+            "recall": 0.5,
+            "f1-score": 0.42857142857142855,
+            "support": 10.0
+          }
+        },
+        "priority_report": {
+          "medium": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "accuracy": 1.0,
+          "macro avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          }
+        },
+        "feature_importance": {
+          "table_count": 0.061060280161686686,
+          "column_count": 0.02386512542672842,
+          "join_count": 0.0,
+          "inner_join_count": 0.0030735509926542123,
+          "left_join_count": 0.002928129582025169,
+          "right_join_count": 0.0,
+          "cross_join_count": 0.0,
+          "where_condition_count": 0.027502136689632653,
+          "and_count": 0.005698390474631303,
+          "or_count": 0.0,
+          "order_by_count": 0.009316086997698373,
+          "group_by_count": 0.0076133508681055844,
+          "has_subquery": 0.08406231080525085,
+          "subquery_depth": 0.09509835691449124,
+          "has_aggregation": 0.010832932665979764,
+          "aggregation_count": 0.019869252524652804,
+          "has_window_function": 0.00985817346529315,
+          "window_function_count": 0.014867266826569046,
+          "has_distinct": 0.008525934115271987,
+          "has_limit": 0.0,
+          "has_offset": 0.0,
+          "has_union": 0.0,
+          "has_case_when": 0.0,
+          "has_cte": 0.0,
+          "has_select_star": 0.006398939002129999,
+          "has_not_in": 0.0,
+          "has_not_exists": 0.0,
+          "has_like_wildcard": 0.00047658852487170844,
+          "has_leading_wildcard": 0.0,
+          "has_or_condition": 0.0,
+          "has_in_clause": 0.049429136606945055,
+          "has_between": 0.0,
+          "has_is_null": 0.0,
+          "has_function_in_where": 0.0,
+          "has_implicit_join": 0.0,
+          "query_length": 0.05794707511130731,
+          "token_count": 0.0299491956647549,
+          "keyword_count": 0.08125328189321018,
+          "identifier_count": 0.03134887112631976,
+          "literal_count": 0.027731116176604377,
+          "operator_count": 0.02916538370124478,
+          "parenthesis_depth": 0.027747706514995744,
+          "avg_identifier_length": 0.04738423080819222,
+          "estimated_complexity_score": 0.180563643804562,
+          "join_complexity_score": 0.0,
+          "predicate_complexity_score": 0.046433552554190585
+        }
+      },
+      "feature_count": 46,
+      "is_active": true
+    }
+  },
+  "predictor": {
+    "predictor_20260119_142251": {
+      "model_id": "predictor_20260119_142251",
+      "model_type": "predictor",
+      "version": "1.0.0",
+      "trained_at": "2026-01-19T14:22:51.429448",
+      "training_samples": 6,
+      "metrics": {
+        "mse": 2148417.8073717314,
+        "rmse": 1465.7482073575022,
+        "mae": 1250.0000000000002,
+        "r2": -0.3749873967179076,
+        "mape": 24267.67498658974
+      },
+      "feature_count": 46,
+      "is_active": true
+    }
+  },
+  "recommender": {
+    "recommender_20260120_104818": {
+      "model_id": "recommender_20260120_104818",
+      "model_type": "recommender",
+      "version": "1.0.0",
+      "trained_at": "2026-01-20T10:48:18.670678",
+      "training_samples": 10,
+      "metrics": {
+        "f1_micro": 1.0,
+        "f1_macro": 1.0,
+        "precision_micro": 1.0,
+        "recall_micro": 1.0
+      },
+      "feature_count": 46,
+      "is_active": false
+    },
+    "recommender_20260120_104828": {
+      "model_id": "recommender_20260120_104828",
+      "model_type": "recommender",
+      "version": "1.0.0",
+      "trained_at": "2026-01-20T10:48:28.834457",
+      "training_samples": 10,
+      "metrics": {
+        "f1_micro": 1.0,
+        "f1_macro": 1.0,
+        "precision_micro": 1.0,
+        "recall_micro": 1.0
+      },
+      "feature_count": 46,
       "is_active": true
     }
   }

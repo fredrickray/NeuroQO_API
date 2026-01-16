@@ -134,18 +134,26 @@ class QueryClassifier:
         cat_pred = self.category_model.predict(X_test)
         pri_pred = self.priority_model.predict(X_test)
         
+        # Get the unique labels present in both training and test data
+        cat_labels = np.arange(len(self.category_encoder.classes_))
+        pri_labels = np.arange(len(self.priority_encoder.classes_))
+        
         metrics = {
             "category_accuracy": accuracy_score(y_cat_test, cat_pred),
             "priority_accuracy": accuracy_score(y_pri_test, pri_pred),
             "category_report": classification_report(
                 y_cat_test, cat_pred, 
+                labels=cat_labels,
                 target_names=self.category_encoder.classes_,
-                output_dict=True
+                output_dict=True,
+                zero_division=0
             ),
             "priority_report": classification_report(
                 y_pri_test, pri_pred,
+                labels=pri_labels,
                 target_names=self.priority_encoder.classes_,
-                output_dict=True
+                output_dict=True,
+                zero_division=0
             ),
             "feature_importance": dict(zip(
                 self.feature_extractor.get_feature_names(),

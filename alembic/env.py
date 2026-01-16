@@ -16,9 +16,8 @@ from app.core.config import settings
 
 # Import all models to ensure they're registered with Base
 from app.models.experiment import Experiment, ExperimentMetric
-from app.models.query_log import QueryLog
-from app.models.query_pattern import QueryPattern
-from app.models.recommendation import Recommendation
+from app.models.query import QueryLog, QueryPattern, OptimizationResult
+from app.models.user import User
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

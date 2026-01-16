@@ -214,11 +214,8 @@ class ModelManager:
     def _train_predictor_sync(self, queries: List[str], execution_times: List[float]) -> Dict[str, float]:
         self.performance_predictor = PerformancePredictor()
         metrics_obj = self.performance_predictor.train(queries, execution_times)
-        
-        if hasattr(metrics_obj, "__dict__"):
-            metrics: Dict[str, float] = {k: float(v) for k, v in vars(metrics_obj).items()}
-        else:
-            metrics = {str(k): float(v) for k, v in vars(metrics_obj).items()}
+        # Only include numeric values in metrics
+        metrics: Dict[str, float] = {k: float(v) for k, v in vars(metrics_obj).items() if isinstance(v, (int, float))}
         self.performance_predictor.save(str(self.model_dir / "predictor.pkl"))
 
         info = ModelInfo(
@@ -237,9 +234,18 @@ class ModelManager:
     def _train_recommender_sync(self, queries: List[str], applied_optimizations: List[List[str]]) -> Dict[str, float]:
         
         self.recommender = OptimizationRecommender()
-        applied_optimizations_typed = [
-            [OptimizationType(opt) for opt in opts] for opts in applied_optimizations
-        ]
+        
+        # Convert string optimization types to enum, skipping invalid values
+        valid_opt_values = {e.value for e in OptimizationType}
+        applied_optimizations_typed = []
+        for opts in applied_optimizations:
+            valid_opts = []
+            for opt in opts:
+                if opt in valid_opt_values:
+                    valid_opts.append(OptimizationType(opt))
+                else:
+                    print(f"Warning: Skipping unknown optimization type '{opt}'")
+            applied_optimizations_typed.append(valid_opts)
         metrics = self.recommender.train(queries, applied_optimizations_typed)
         self.recommender.save(str(self.model_dir / "recommender.pkl"))
 

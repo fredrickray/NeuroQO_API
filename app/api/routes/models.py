@@ -1,10 +1,10 @@
 """
 ML model management API endpoints.
 """
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, status
+
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Optional, cast
-import json
+from typing import Optional
 
 from app.core.database import get_db
 from app.core.security import get_current_active_user
@@ -16,246 +16,176 @@ from app.ml.optimization_recommender import OptimizationRecommender
 
 router = APIRouter(prefix="/models", tags=["ML Models"])
 
-# Initialize managers
 model_manager = ModelManager()
 
 
+# =========================
+# Model Registry & Status
+# =========================
+
 @router.get("/status")
 async def get_models_status():
-    """
-    Get status of all ML models.
-    
-    Returns training status, versions, and health metrics.
-    """
+    """Get status of all registered models."""
     return {
-        "models": model_manager.get_all_model_status(),
-        "health": {
-            "overall": "healthy",
-            "drift_detected": any(model_manager.check_all_models_drift().values())
-        }
+        "models": model_manager.get_model_info(),
+        "monitoring": model_manager.get_monitoring_summary(),
     }
 
 
 @router.get("/{model_type}/status")
 async def get_model_status(model_type: str):
     """Get status of a specific model."""
-    model_status = model_manager.get_model_status(model_type)
-    if not model_status:
+    info = model_manager.get_model_info(model_type)
+    if not info:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Model type '{model_type}' not found"
+            detail=f"Model type '{model_type}' not found",
         )
-    return model_status
+    return info
 
+
+# =========================
+# Training
+# =========================
 
 @router.post("/{model_type}/train")
 async def train_model(
     model_type: str,
     current_user: User = Depends(get_current_active_user),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
-    """
-    Trigger model training.
-    
-    This starts an async training job for the specified model.
-    Requires operator or admin role.
-    """
+    """Trigger model training."""
     if current_user.role not in [UserRole.OPERATOR, UserRole.ADMIN]:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Operator or admin access required"
+            detail="Operator or admin access required",
         )
-    
-    valid_types = ["classifier", "predictor", "recommender"]
-    if model_type not in valid_types:
+
+    result = await model_manager.train_model(model_type, db)
+
+    if result.get("status") != "trained":
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Invalid model type. Must be one of: {valid_types}"
+            detail=result.get("message", "Training failed"),
         )
-    
-    # In production, this would queue a background job
-    result = await model_manager.train_model(model_type, db)
-    
-    return {
-        "message": f"Training initiated for {model_type}",
-        "job_id": result.get("job_id"),
-        "status": "training"
-    }
 
+    return result
+
+
+# =========================
+# Metrics & Drift
+# =========================
 
 @router.get("/{model_type}/metrics")
 async def get_model_metrics(model_type: str):
-    """Get performance metrics for a specific model."""
-    metrics = model_manager.get_model_metrics()
-    
-    if model_type not in metrics:
+    """Get performance metrics for a model."""
+    metrics = model_manager.get_model_metrics(model_type)
+    if not metrics:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"No metrics found for model type '{model_type}'"
+            detail=f"No metrics found for model '{model_type}'",
         )
-    
     return {
         "model_type": model_type,
-        "metrics": metrics[model_type]
+        "metrics": metrics,
     }
 
 
 @router.get("/{model_type}/drift")
 async def check_model_drift(model_type: str):
-    """Check for model drift."""
-    drift_status = model_manager.check_model_drift(model_type)
-    
-    return {
-        "model_type": model_type,
-        "drift_detected": drift_status.get("drift_detected", False),
-        "drift_score": drift_status.get("drift_score", 0.0),
-        "recommendation": drift_status.get("recommendation", "Model is stable")
-    }
-
-
-@router.post("/{model_type}/rollback")
-async def rollback_model(
-    model_type: str,
-    version: Optional[str] = None,
-    current_user: dict = Depends(get_current_active_user)
-):
-    """
-    Rollback model to a previous version.
-    
-    If version is not specified, rolls back to the previous version.
-    """
-    user_role = current_user.get("role", "")
-    if user_role not in [UserRole.OPERATOR.value, UserRole.ADMIN.value]:
+    """Check drift for a model."""
+    monitoring = model_manager.get_model_monitoring_stats(model_type)
+    if not monitoring:
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Operator or admin access required"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Model '{model_type}' not found",
         )
-    
-    result = model_manager.rollback_model(model_type, version or "previous")
-    
+
+    drift = monitoring.drift_metrics
     return {
-        "message": f"Model rollback attempted",
         "model_type": model_type,
-        "result": result
+        "drift_detected": drift.is_drift_detected if drift else False,
+        "feature_drift_score": drift.feature_drift_score if drift else 0.0,
+        "recommendation": drift.recommendation if drift else "No drift data",
     }
 
 
-@router.get("/{model_type}/versions")
-async def list_model_versions(model_type: str):
-    """List all available versions of a model."""
-    versions = model_manager.list_model_versions(model_type)
-    
-    return {
-        "model_type": model_type,
-        "versions": versions,
-        "current_version": model_manager.get_current_version(model_type)
-    }
+# =========================
+# Monitoring
+# =========================
 
-
-@router.post("/{model_type}/export")
-async def export_model(
-    model_type: str,
-    current_user: User = Depends(get_current_active_user)
-):
-    """Export a model for external use."""
-    if current_user.role not in [UserRole.OPERATOR, UserRole.ADMIN]:
+@router.get("/{model_type}/monitoring")
+async def get_model_monitoring(model_type: str):
+    """Get detailed monitoring statistics."""
+    stats = model_manager.get_model_monitoring_stats(model_type)
+    if not stats:
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Operator or admin access required"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Model '{model_type}' not found",
         )
-    
-    export_path = model_manager.export_model(model_type)
-    
-    return {
-        "message": "Model exported successfully",
-        "model_type": model_type,
-        "export_path": export_path
-    }
+    return stats
 
 
-@router.post("/{model_type}/import")
-async def import_model(
-    model_type: str,
-    file: UploadFile = File(...),
-    current_user: dict = Depends(get_current_active_user)
-):
-    """Import a model from file."""
-    user_role = current_user.get("role", "")
-    if user_role != UserRole.ADMIN.value:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Admin access required"
-        )
-    
-    contents = await file.read()
-    result = model_manager.import_model(model_type, contents)
-    
-    return {
-        "message": "Model import attempted",
-        "model_type": model_type,
-        "result": result
-    }
+@router.get("/monitoring/summary")
+async def get_monitoring_summary():
+    """Get global monitoring summary."""
+    return model_manager.get_monitoring_summary()
 
+
+# =========================
+# Predictions
+# =========================
 
 @router.post("/predict/classify")
 async def classify_query(query_text: str):
-    """
-    Classify a query using the ML model.
-    
-    Returns the predicted category and optimization priority.
-    """
+    """Classify a query."""
     classifier = QueryClassifier()
     result = classifier.classify(query_text)
-    
+
     return {
-        "query_text": query_text[:200] + "..." if len(query_text) > 200 else query_text,
+        "query_text": query_text[:200],
         "classification": {
             "category": result.category.value,
             "category_confidence": result.category_confidence,
             "optimization_priority": result.optimization_priority.value,
             "priority_confidence": result.priority_confidence,
             "optimization_types": result.optimization_types,
-            "reasoning": result.reasoning
-        }
+            "reasoning": result.reasoning,
+        },
     }
 
 
 @router.post("/predict/performance")
 async def predict_performance(query_text: str):
-    """
-    Predict query performance using the ML model.
-    
-    Returns estimated execution time and confidence.
-    """
+    """Predict query performance."""
     predictor = PerformancePredictor()
     result = predictor.predict(query_text)
-    
+
     return {
-        "query_text": query_text[:200] + "..." if len(query_text) > 200 else query_text,
+        "query_text": query_text[:200],
         "prediction": {
             "predicted_time_ms": result.predicted_time_ms,
             "confidence_interval": result.confidence_interval,
             "model_confidence": result.model_confidence,
             "performance_class": result.performance_class,
             "is_slow_prediction": result.is_slow_prediction,
-            "factors": result.contributing_factors
-        }
+            "factors": result.contributing_factors,
+        },
     }
 
 
 @router.post("/predict/optimize")
 async def get_optimization_recommendations(query_text: str):
-    """
-    Get optimization recommendations for a query.
-    
-    Uses ML model to suggest optimizations.
-    """
+    """Get optimization recommendations."""
     recommender = OptimizationRecommender()
     result = recommender.recommend(query_text)
-    
+
     return {
-        "query_text": query_text[:200] + "..." if len(query_text) > 200 else query_text,
+        "query_text": query_text[:200],
         "recommendations": {
+            "overall_score": result.overall_optimization_score,
+            "model_confidence": result.model_confidence,
+            "query_issues": result.query_issues,
             "suggestions": [
                 {
                     "type": s.optimization_type.value,
@@ -264,34 +194,9 @@ async def get_optimization_recommendations(query_text: str):
                     "estimated_improvement": s.estimated_improvement_pct,
                     "confidence": s.confidence,
                     "risk_level": s.risk_level,
-                    "priority": s.priority
+                    "priority": s.priority,
                 }
                 for s in result.suggestions
             ],
-            "overall_score": result.overall_optimization_score,
-            "query_issues": result.query_issues,
-            "model_confidence": result.model_confidence
-        }
-    }
-
-
-@router.get("/training/history")
-async def get_training_history(
-    model_type: Optional[str] = None,
-    limit: int = 20
-):
-    """Get training history for models."""
-    history = model_manager.get_training_history(model_type or "all", limit)
-    
-    return {
-        "training_history": history
-    }
-
-
-@router.get("/monitoring/summary")
-async def get_monitoring_summary():
-    """Get summary of model monitoring data."""
-    return {
-        "summary": model_manager.get_monitoring_summary(),
-        "alerts": model_manager.get_active_alerts()
+        },
     }

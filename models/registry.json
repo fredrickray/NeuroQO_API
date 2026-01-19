@@ -1,0 +1,107 @@
+{
+  "classifier": {
+    "classifier_20260119_051534": {
+      "model_id": "classifier_20260119_051534",
+      "model_type": "classifier",
+      "version": "1.0.0",
+      "trained_at": "2026-01-19T05:15:34.730748",
+      "training_samples": 2,
+      "metrics": {
+        "category_accuracy": 1.0,
+        "priority_accuracy": 1.0,
+        "category_report": {
+          "moderate": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 1.0
+          },
+          "accuracy": 1.0,
+          "macro avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 1.0
+          },
+          "weighted avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 1.0
+          }
+        },
+        "priority_report": {
+          "medium": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 1.0
+          },
+          "accuracy": 1.0,
+          "macro avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 1.0
+          },
+          "weighted avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 1.0
+          }
+        },
+        "feature_importance": {
+          "table_count": 0.0,
+          "column_count": 0.0,
+          "join_count": 0.0,
+          "inner_join_count": 0.0,
+          "left_join_count": 0.0,
+          "right_join_count": 0.0,
+          "cross_join_count": 0.0,
+          "where_condition_count": 0.0,
+          "and_count": 0.0,
+          "or_count": 0.0,
+          "order_by_count": 0.0,
+          "group_by_count": 0.0,
+          "has_subquery": 0.0,
+          "subquery_depth": 0.0,
+          "has_aggregation": 0.0,
+          "aggregation_count": 0.0,
+          "has_window_function": 0.0,
+          "window_function_count": 0.0,
+          "has_distinct": 0.0,
+          "has_limit": 0.0,
+          "has_offset": 0.0,
+          "has_union": 0.0,
+          "has_case_when": 0.0,
+          "has_cte": 0.0,
+          "has_select_star": 0.0,
+          "has_not_in": 0.0,
+          "has_not_exists": 0.0,
+          "has_like_wildcard": 0.0,
+          "has_leading_wildcard": 0.0,
+          "has_or_condition": 0.0,
+          "has_in_clause": 0.0,
+          "has_between": 0.0,
+          "has_is_null": 0.0,
+          "has_function_in_where": 0.0,
+          "has_implicit_join": 0.0,
+          "query_length": 0.0,
+          "token_count": 0.0,
+          "keyword_count": 0.0,
+          "identifier_count": 0.0,
+          "literal_count": 0.0,
+          "operator_count": 0.0,
+          "parenthesis_depth": 0.0,
+          "avg_identifier_length": 0.0,
+          "estimated_complexity_score": 0.0,
+          "join_complexity_score": 0.0,
+          "predicate_complexity_score": 0.0
+        }
+      },
+      "feature_count": 46,
+      "is_active": true
+    }
+  }
+}

@@ -214,6 +214,82 @@ async def capture_query(
     return QueryLogResponse.model_validate(query_log)
 
 
+@router.post("/batch", status_code=status.HTTP_201_CREATED)
+async def capture_queries_batch(
+    queries: List[QueryLogCreate],
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Capture multiple queries in a single batch operation.
+    
+    This endpoint is useful for bulk importing queries for training ML models.
+    
+    - **queries**: List of query objects with query_text and execution_time_ms
+    
+    Returns summary of the batch operation.
+    """
+    created_count = 0
+    failed_count = 0
+    created_ids: List[int] = []
+    errors: List[dict] = []
+    
+    for i, query_data in enumerate(queries):
+        try:
+            # Analyze the query
+            analysis = analyzer_service.analyze(query_data.query_text)
+            
+            # Classify the query
+            classification = classifier.classify(query_data.query_text)
+            
+            # Determine if slow
+            is_slow = query_data.execution_time_ms >= 1000
+            
+            # Create query log entry
+            query_log = QueryLog(
+                query_hash=analysis.query_hash,
+                query_text=query_data.query_text,
+                normalized_query=analysis.normalized_query,
+                execution_time_ms=query_data.execution_time_ms,
+                rows_examined=query_data.rows_examined,
+                rows_returned=query_data.rows_returned,
+                execution_plan=query_data.execution_plan,
+                query_type=analysis.query_type.value,
+                tables_involved=analysis.tables,
+                complexity=QueryComplexity(analysis.estimated_complexity),
+                status=QueryStatus.PENDING,
+                is_slow=is_slow,
+                captured_at=datetime.utcnow()
+            )
+            
+            db.add(query_log)
+            await db.flush()  # Get the ID without committing
+            created_ids.append(query_log.id)
+            created_count += 1
+            
+            # Update pattern
+            await _update_query_pattern(db, analysis, query_data.execution_time_ms)
+            
+        except Exception as e:
+            failed_count += 1
+            errors.append({
+                "index": i,
+                "query_text": query_data.query_text[:100] + "..." if len(query_data.query_text) > 100 else query_data.query_text,
+                "error": str(e)
+            })
+    
+    # Commit all successful entries
+    await db.commit()
+    
+    return {
+        "status": "completed",
+        "total_submitted": len(queries),
+        "created_count": created_count,
+        "failed_count": failed_count,
+        "created_ids": created_ids,
+        "errors": errors if errors else None
+    }
+
+
 @router.post("/analyze")
 async def analyze_query(
     request: AnalyzeQueryRequest,

@@ -573,6 +573,611 @@
         }
       },
       "feature_count": 46,
+      "is_active": false
+    },
+    "classifier_20260120_144540": {
+      "model_id": "classifier_20260120_144540",
+      "model_type": "classifier",
+      "version": "1.0.0",
+      "trained_at": "2026-01-20T14:45:40.129129",
+      "training_samples": 46,
+      "metrics": {
+        "category_accuracy": 0.5,
+        "priority_accuracy": 1.0,
+        "category_report": {
+          "complex": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 2.0
+          },
+          "moderate": {
+            "precision": 0.625,
+            "recall": 0.8333333333333334,
+            "f1-score": 0.7142857142857143,
+            "support": 6.0
+          },
+          "simple": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 1.0
+          },
+          "very_complex": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 1.0
+          },
+          "accuracy": 0.5,
+          "macro avg": {
+            "precision": 0.15625,
+            "recall": 0.20833333333333334,
+            "f1-score": 0.17857142857142858,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 0.375,
+            "recall": 0.5,
+            "f1-score": 0.42857142857142855,
+            "support": 10.0
+          }
+        },
+        "priority_report": {
+          "medium": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "accuracy": 1.0,
+          "macro avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          }
+        },
+        "feature_importance": {
+          "table_count": 0.07120582712702073,
+          "column_count": 0.01875343818697183,
+          "join_count": 0.0,
+          "inner_join_count": 0.0028467606273835286,
+          "left_join_count": 0.003806977532789382,
+          "right_join_count": 0.0,
+          "cross_join_count": 0.0,
+          "where_condition_count": 0.024350516285549913,
+          "and_count": 0.004884290115658438,
+          "or_count": 0.0,
+          "order_by_count": 0.011678807929541218,
+          "group_by_count": 0.0032144873120934403,
+          "has_subquery": 0.10063875177656084,
+          "subquery_depth": 0.10159521026475937,
+          "has_aggregation": 0.010056404016442377,
+          "aggregation_count": 0.016169604593236592,
+          "has_window_function": 0.007796039360876303,
+          "window_function_count": 0.014742496468733409,
+          "has_distinct": 0.012002892780480594,
+          "has_limit": 0.0,
+          "has_offset": 0.0,
+          "has_union": 0.0,
+          "has_case_when": 0.0,
+          "has_cte": 0.0,
+          "has_select_star": 0.004802974201571715,
+          "has_not_in": 0.0,
+          "has_not_exists": 0.0,
+          "has_like_wildcard": 4.09500409500408e-05,
+          "has_leading_wildcard": 0.0,
+          "has_or_condition": 0.0,
+          "has_in_clause": 0.03388646805159839,
+          "has_between": 0.0,
+          "has_is_null": 0.0,
+          "has_function_in_where": 0.0,
+          "has_implicit_join": 0.0,
+          "query_length": 0.049120533581876465,
+          "token_count": 0.03802273500529185,
+          "keyword_count": 0.08920767755332684,
+          "identifier_count": 0.022918781414110693,
+          "literal_count": 0.026929885712792704,
+          "operator_count": 0.03800151718388304,
+          "parenthesis_depth": 0.025867811016730167,
+          "avg_identifier_length": 0.04297775065876093,
+          "estimated_complexity_score": 0.17823336791003005,
+          "join_complexity_score": 0.0,
+          "predicate_complexity_score": 0.0462470432909791
+        }
+      },
+      "feature_count": 46,
+      "is_active": false
+    },
+    "classifier_20260120_144543": {
+      "model_id": "classifier_20260120_144543",
+      "model_type": "classifier",
+      "version": "1.0.0",
+      "trained_at": "2026-01-20T14:45:43.632888",
+      "training_samples": 46,
+      "metrics": {
+        "category_accuracy": 0.5,
+        "priority_accuracy": 1.0,
+        "category_report": {
+          "complex": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 2.0
+          },
+          "moderate": {
+            "precision": 0.625,
+            "recall": 0.8333333333333334,
+            "f1-score": 0.7142857142857143,
+            "support": 6.0
+          },
+          "simple": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 1.0
+          },
+          "very_complex": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 1.0
+          },
+          "accuracy": 0.5,
+          "macro avg": {
+            "precision": 0.15625,
+            "recall": 0.20833333333333334,
+            "f1-score": 0.17857142857142858,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 0.375,
+            "recall": 0.5,
+            "f1-score": 0.42857142857142855,
+            "support": 10.0
+          }
+        },
+        "priority_report": {
+          "medium": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "accuracy": 1.0,
+          "macro avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          }
+        },
+        "feature_importance": {
+          "table_count": 0.07120582712702073,
+          "column_count": 0.01875343818697183,
+          "join_count": 0.0,
+          "inner_join_count": 0.0028467606273835286,
+          "left_join_count": 0.003806977532789382,
+          "right_join_count": 0.0,
+          "cross_join_count": 0.0,
+          "where_condition_count": 0.024350516285549913,
+          "and_count": 0.004884290115658438,
+          "or_count": 0.0,
+          "order_by_count": 0.011678807929541218,
+          "group_by_count": 0.0032144873120934403,
+          "has_subquery": 0.10063875177656084,
+          "subquery_depth": 0.10159521026475937,
+          "has_aggregation": 0.010056404016442377,
+          "aggregation_count": 0.016169604593236592,
+          "has_window_function": 0.007796039360876303,
+          "window_function_count": 0.014742496468733409,
+          "has_distinct": 0.012002892780480594,
+          "has_limit": 0.0,
+          "has_offset": 0.0,
+          "has_union": 0.0,
+          "has_case_when": 0.0,
+          "has_cte": 0.0,
+          "has_select_star": 0.004802974201571715,
+          "has_not_in": 0.0,
+          "has_not_exists": 0.0,
+          "has_like_wildcard": 4.09500409500408e-05,
+          "has_leading_wildcard": 0.0,
+          "has_or_condition": 0.0,
+          "has_in_clause": 0.03388646805159839,
+          "has_between": 0.0,
+          "has_is_null": 0.0,
+          "has_function_in_where": 0.0,
+          "has_implicit_join": 0.0,
+          "query_length": 0.049120533581876465,
+          "token_count": 0.03802273500529185,
+          "keyword_count": 0.08920767755332684,
+          "identifier_count": 0.022918781414110693,
+          "literal_count": 0.026929885712792704,
+          "operator_count": 0.03800151718388304,
+          "parenthesis_depth": 0.025867811016730167,
+          "avg_identifier_length": 0.04297775065876093,
+          "estimated_complexity_score": 0.17823336791003005,
+          "join_complexity_score": 0.0,
+          "predicate_complexity_score": 0.0462470432909791
+        }
+      },
+      "feature_count": 46,
+      "is_active": false
+    },
+    "classifier_20260120_144545": {
+      "model_id": "classifier_20260120_144545",
+      "model_type": "classifier",
+      "version": "1.0.0",
+      "trained_at": "2026-01-20T14:45:45.651017",
+      "training_samples": 46,
+      "metrics": {
+        "category_accuracy": 0.5,
+        "priority_accuracy": 1.0,
+        "category_report": {
+          "complex": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 2.0
+          },
+          "moderate": {
+            "precision": 0.625,
+            "recall": 0.8333333333333334,
+            "f1-score": 0.7142857142857143,
+            "support": 6.0
+          },
+          "simple": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 1.0
+          },
+          "very_complex": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 1.0
+          },
+          "accuracy": 0.5,
+          "macro avg": {
+            "precision": 0.15625,
+            "recall": 0.20833333333333334,
+            "f1-score": 0.17857142857142858,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 0.375,
+            "recall": 0.5,
+            "f1-score": 0.42857142857142855,
+            "support": 10.0
+          }
+        },
+        "priority_report": {
+          "medium": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "accuracy": 1.0,
+          "macro avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          }
+        },
+        "feature_importance": {
+          "table_count": 0.07120582712702073,
+          "column_count": 0.01875343818697183,
+          "join_count": 0.0,
+          "inner_join_count": 0.0028467606273835286,
+          "left_join_count": 0.003806977532789382,
+          "right_join_count": 0.0,
+          "cross_join_count": 0.0,
+          "where_condition_count": 0.024350516285549913,
+          "and_count": 0.004884290115658438,
+          "or_count": 0.0,
+          "order_by_count": 0.011678807929541218,
+          "group_by_count": 0.0032144873120934403,
+          "has_subquery": 0.10063875177656084,
+          "subquery_depth": 0.10159521026475937,
+          "has_aggregation": 0.010056404016442377,
+          "aggregation_count": 0.016169604593236592,
+          "has_window_function": 0.007796039360876303,
+          "window_function_count": 0.014742496468733409,
+          "has_distinct": 0.012002892780480594,
+          "has_limit": 0.0,
+          "has_offset": 0.0,
+          "has_union": 0.0,
+          "has_case_when": 0.0,
+          "has_cte": 0.0,
+          "has_select_star": 0.004802974201571715,
+          "has_not_in": 0.0,
+          "has_not_exists": 0.0,
+          "has_like_wildcard": 4.09500409500408e-05,
+          "has_leading_wildcard": 0.0,
+          "has_or_condition": 0.0,
+          "has_in_clause": 0.03388646805159839,
+          "has_between": 0.0,
+          "has_is_null": 0.0,
+          "has_function_in_where": 0.0,
+          "has_implicit_join": 0.0,
+          "query_length": 0.049120533581876465,
+          "token_count": 0.03802273500529185,
+          "keyword_count": 0.08920767755332684,
+          "identifier_count": 0.022918781414110693,
+          "literal_count": 0.026929885712792704,
+          "operator_count": 0.03800151718388304,
+          "parenthesis_depth": 0.025867811016730167,
+          "avg_identifier_length": 0.04297775065876093,
+          "estimated_complexity_score": 0.17823336791003005,
+          "join_complexity_score": 0.0,
+          "predicate_complexity_score": 0.0462470432909791
+        }
+      },
+      "feature_count": 46,
+      "is_active": false
+    },
+    "classifier_20260120_151045": {
+      "model_id": "classifier_20260120_151045",
+      "model_type": "classifier",
+      "version": "1.0.0",
+      "trained_at": "2026-01-20T15:10:45.043312",
+      "training_samples": 46,
+      "metrics": {
+        "category_accuracy": 0.6,
+        "priority_accuracy": 1.0,
+        "category_report": {
+          "complex": {
+            "precision": 1.0,
+            "recall": 0.3333333333333333,
+            "f1-score": 0.5,
+            "support": 3.0
+          },
+          "moderate": {
+            "precision": 0.7142857142857143,
+            "recall": 0.8333333333333334,
+            "f1-score": 0.7692307692307693,
+            "support": 6.0
+          },
+          "simple": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 1.0
+          },
+          "very_complex": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 0.0
+          },
+          "accuracy": 0.6,
+          "macro avg": {
+            "precision": 0.4285714285714286,
+            "recall": 0.2916666666666667,
+            "f1-score": 0.3173076923076923,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 0.7285714285714285,
+            "recall": 0.6,
+            "f1-score": 0.6115384615384616,
+            "support": 10.0
+          }
+        },
+        "priority_report": {
+          "medium": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "accuracy": 1.0,
+          "macro avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          }
+        },
+        "feature_importance": {
+          "table_count": 0.10036941870530931,
+          "column_count": 0.014907250805600075,
+          "join_count": 0.0,
+          "inner_join_count": 0.005766122047429752,
+          "left_join_count": 0.003162555437590084,
+          "right_join_count": 0.0,
+          "cross_join_count": 0.0,
+          "where_condition_count": 0.020827705821726293,
+          "and_count": 0.006452028770483873,
+          "or_count": 0.0,
+          "order_by_count": 0.007811370784642232,
+          "group_by_count": 0.0025063977322198625,
+          "has_subquery": 0.07355321635808919,
+          "subquery_depth": 0.09229700900112228,
+          "has_aggregation": 0.014055064984808487,
+          "aggregation_count": 0.012848630940313499,
+          "has_window_function": 0.005417897359496331,
+          "window_function_count": 0.014292645874218479,
+          "has_distinct": 0.009224483970179461,
+          "has_limit": 0.0,
+          "has_offset": 0.0,
+          "has_union": 0.0,
+          "has_case_when": 0.0,
+          "has_cte": 0.0,
+          "has_select_star": 0.004668862336567967,
+          "has_not_in": 0.0,
+          "has_not_exists": 0.0,
+          "has_like_wildcard": 1.544969425055101e-05,
+          "has_leading_wildcard": 0.0,
+          "has_or_condition": 0.0,
+          "has_in_clause": 0.02267524179745653,
+          "has_between": 0.0,
+          "has_is_null": 0.0,
+          "has_function_in_where": 0.0,
+          "has_implicit_join": 0.0,
+          "query_length": 0.05707349645872547,
+          "token_count": 0.04392206615094032,
+          "keyword_count": 0.09008462686905874,
+          "identifier_count": 0.02251286951953359,
+          "literal_count": 0.027858580239662915,
+          "operator_count": 0.04147503653079798,
+          "parenthesis_depth": 0.022357839335679357,
+          "avg_identifier_length": 0.04706394592135266,
+          "estimated_complexity_score": 0.19744868789243564,
+          "join_complexity_score": 0.0,
+          "predicate_complexity_score": 0.03935149866030908
+        }
+      },
+      "feature_count": 46,
+      "is_active": false
+    },
+    "classifier_20260120_155323": {
+      "model_id": "classifier_20260120_155323",
+      "model_type": "classifier",
+      "version": "1.0.0",
+      "trained_at": "2026-01-20T15:53:23.161687",
+      "training_samples": 46,
+      "metrics": {
+        "category_accuracy": 0.6,
+        "priority_accuracy": 1.0,
+        "category_report": {
+          "complex": {
+            "precision": 1.0,
+            "recall": 0.3333333333333333,
+            "f1-score": 0.5,
+            "support": 3.0
+          },
+          "moderate": {
+            "precision": 0.7142857142857143,
+            "recall": 0.8333333333333334,
+            "f1-score": 0.7692307692307693,
+            "support": 6.0
+          },
+          "simple": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 1.0
+          },
+          "very_complex": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 0.0
+          },
+          "accuracy": 0.6,
+          "macro avg": {
+            "precision": 0.4285714285714286,
+            "recall": 0.2916666666666667,
+            "f1-score": 0.3173076923076923,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 0.7285714285714285,
+            "recall": 0.6,
+            "f1-score": 0.6115384615384616,
+            "support": 10.0
+          }
+        },
+        "priority_report": {
+          "medium": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "accuracy": 1.0,
+          "macro avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          }
+        },
+        "feature_importance": {
+          "table_count": 0.10036941870530931,
+          "column_count": 0.014907250805600075,
+          "join_count": 0.0,
+          "inner_join_count": 0.005766122047429752,
+          "left_join_count": 0.003162555437590084,
+          "right_join_count": 0.0,
+          "cross_join_count": 0.0,
+          "where_condition_count": 0.020827705821726293,
+          "and_count": 0.006452028770483873,
+          "or_count": 0.0,
+          "order_by_count": 0.007811370784642232,
+          "group_by_count": 0.0025063977322198625,
+          "has_subquery": 0.07355321635808919,
+          "subquery_depth": 0.09229700900112228,
+          "has_aggregation": 0.014055064984808487,
+          "aggregation_count": 0.012848630940313499,
+          "has_window_function": 0.005417897359496331,
+          "window_function_count": 0.014292645874218479,
+          "has_distinct": 0.009224483970179461,
+          "has_limit": 0.0,
+          "has_offset": 0.0,
+          "has_union": 0.0,
+          "has_case_when": 0.0,
+          "has_cte": 0.0,
+          "has_select_star": 0.004668862336567967,
+          "has_not_in": 0.0,
+          "has_not_exists": 0.0,
+          "has_like_wildcard": 1.544969425055101e-05,
+          "has_leading_wildcard": 0.0,
+          "has_or_condition": 0.0,
+          "has_in_clause": 0.02267524179745653,
+          "has_between": 0.0,
+          "has_is_null": 0.0,
+          "has_function_in_where": 0.0,
+          "has_implicit_join": 0.0,
+          "query_length": 0.05707349645872547,
+          "token_count": 0.04392206615094032,
+          "keyword_count": 0.09008462686905874,
+          "identifier_count": 0.02251286951953359,
+          "literal_count": 0.027858580239662915,
+          "operator_count": 0.04147503653079798,
+          "parenthesis_depth": 0.022357839335679357,
+          "avg_identifier_length": 0.04706394592135266,
+          "estimated_complexity_score": 0.19744868789243564,
+          "join_complexity_score": 0.0,
+          "predicate_complexity_score": 0.03935149866030908
+        }
+      },
+      "feature_count": 46,
       "is_active": true
     }
   },

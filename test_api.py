@@ -266,6 +266,108 @@ async def test_models():
             print(f"   ⚠️  Status returned: {response.status_code}")
 
 
+async def test_validation():
+    """Test validation endpoints."""
+    async with httpx.AsyncClient() as client:
+        headers = {"Authorization": f"Bearer {token}"}
+        print("\n📌 Testing Validation Endpoints...")
+        
+        # Seed test data
+        print("   → Seeding test data...")
+        response = await client.post(f"{BASE_URL}/validation/seed",
+            headers=headers,
+            json={
+                "drop_existing": True,
+                "num_products": 50,
+                "num_customers": 20,
+                "num_orders": 100
+            },
+            timeout=60.0
+        )
+        if response.status_code == 200:
+            data = response.json()
+            if data.get("success"):
+                print(f"   ✅ Test data seeded: {data.get('records_inserted', {})}")
+            else:
+                print(f"   ⚠️  Seeding failed: {data.get('error')}")
+                return
+        else:
+            print(f"   ⚠️  Seed returned: {response.status_code} - {response.text}")
+            print("   ℹ️  Skipping remaining validation tests (target DB may not be configured)")
+            return
+        
+        # List tables
+        print("   → Listing test tables...")
+        response = await client.get(f"{BASE_URL}/validation/tables", headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            tables = data.get("tables", [])
+            print(f"   ✅ Found {len(tables)} tables: {[t['name'] for t in tables]}")
+        else:
+            print(f"   ⚠️  List tables returned: {response.status_code}")
+        
+        # Execute a simple query
+        print("   → Executing test query...")
+        response = await client.post(f"{BASE_URL}/validation/execute",
+            headers=headers,
+            json={
+                "query": "SELECT id, name, price FROM products WHERE price > 50 LIMIT 10",
+                "limit": 10
+            }
+        )
+        if response.status_code == 200:
+            data = response.json()
+            if data.get("success"):
+                print(f"   ✅ Query executed in {data.get('execution_time_ms', 0):.2f}ms, {data.get('row_count', 0)} rows")
+            else:
+                print(f"   ⚠️  Query failed: {data.get('error')}")
+        else:
+            print(f"   ⚠️  Execute returned: {response.status_code}")
+        
+        # Run validation test
+        print("   → Running validation test...")
+        response = await client.post(f"{BASE_URL}/validation/test",
+            headers=headers,
+            json={
+                "query": "SELECT * FROM products WHERE category_id = 5",
+                "run_optimized": True,
+                "limit": 50
+            }
+        )
+        if response.status_code == 200:
+            data = response.json()
+            if data.get("success"):
+                orig_time = data.get("original_execution_time_ms", 0)
+                opt_time = data.get("optimized_execution_time_ms")
+                results_match = data.get("results_match", False)
+                improvement = data.get("improvement_percentage", 0)
+                rules = data.get("optimization_rules", [])
+                
+                print(f"   ✅ Validation complete:")
+                print(f"      Original: {orig_time:.2f}ms, {data.get('original_row_count', 0)} rows")
+                if opt_time is not None:
+                    print(f"      Optimized: {opt_time:.2f}ms ({improvement:+.1f}% improvement)")
+                    print(f"      Rules applied: {rules}")
+                    print(f"      Results match: {'✅' if results_match else '❌'}")
+                else:
+                    print(f"      No optimization was applied")
+                print(f"      Recommendations: {len(data.get('recommendations', []))}")
+            else:
+                print(f"   ⚠️  Validation failed: {data.get('error')}")
+        else:
+            print(f"   ⚠️  Test returned: {response.status_code}")
+        
+        # Get sample queries
+        print("   → Getting sample queries...")
+        response = await client.get(f"{BASE_URL}/validation/sample-queries", headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            total_queries = sum(len(v) for v in data.values())
+            print(f"   ✅ Got {total_queries} sample queries in {len(data)} categories")
+        else:
+            print(f"   ⚠️  Sample queries returned: {response.status_code}")
+
+
 async def main():
     """Run all tests."""
     print("=" * 60)
@@ -291,6 +393,7 @@ async def main():
     await test_experiments()
     await test_dashboard()
     await test_models()
+    await test_validation()
     
     print("\n" + "=" * 60)
     print("✅ All tests completed!")
@@ -300,3 +403,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+

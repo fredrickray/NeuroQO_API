@@ -14,7 +14,7 @@ from datetime import datetime
 
 from app.core.config import settings
 from app.core.database import engine, Base
-from app.api.routes import queries, optimizations, indexes, experiments, dashboard, auth
+from app.api.routes import queries, optimizations, indexes, experiments, dashboard, auth, validation
 from app.api.routes import models as ml_models
 
 # Configure logging
@@ -157,6 +157,7 @@ app.include_router(experiments.router, prefix=API_PREFIX)
 app.include_router(dashboard.router, prefix=API_PREFIX)
 app.include_router(ml_models.router, prefix=API_PREFIX)
 app.include_router(auth.router, prefix=API_PREFIX)
+app.include_router(validation.router, prefix=API_PREFIX)
 
 
 # Root endpoints
@@ -198,7 +199,8 @@ async def api_info():
             "experiments": "/api/v1/experiments",
             "dashboard": "/api/v1/dashboard",
             "models": "/api/v1/models",
-            "auth": "/api/v1/auth"
+            "auth": "/api/v1/auth",
+            "validation": "/api/v1/validation"
         }
     }
 

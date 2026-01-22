@@ -6,6 +6,7 @@ from app.api.routes import experiments
 from app.api.routes import dashboard
 from app.api.routes import auth
 from app.api.routes import models
+from app.api.routes import validation
 
 __all__ = [
     "queries",
@@ -14,5 +15,6 @@ __all__ = [
     "experiments",
     "dashboard",
     "auth",
-    "models"
+    "models",
+    "validation"
 ]

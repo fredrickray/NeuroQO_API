@@ -1,11 +1,4 @@
-"""
-Query Validation API endpoints for testing and verifying optimizations.
 
-This module provides endpoints to:
-- Execute queries against the target database
-- Run validation tests comparing original and optimized queries
-- Seed test tables with sample data for testing
-"""
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import text
@@ -40,20 +33,12 @@ DANGEROUS_KEYWORDS = {"DROP", "TRUNCATE", "ALTER", "CREATE", "GRANT", "REVOKE", 
 
 
 def validate_sql_query(query: str, allow_mutations: bool = False) -> dict:
-    """
-    Validate that the input is a proper SQL query.
-    
-    Returns:
-        dict with 'valid' (bool), 'error' (str or None), and 'query_type' (str or None)
-    """
     if not query or not query.strip():
         return {
             "valid": False,
             "error": "Query cannot be empty",
             "query_type": None
         }
-    
-    # Clean and normalize the query
     cleaned = query.strip()
     
     # Check minimum length (must be at least "SELECT 1" length)
@@ -185,18 +170,6 @@ async def execute_query(
     request: ExecuteQueryRequest,
     db: AsyncSession = Depends(get_target_db)
 ):
-    """
-    Execute a raw SQL query against the target database.
-    
-    Returns the results with execution time measurements.
-    Use this to test individual queries.
-    
-    **Note**: 
-    - Only SELECT and WITH queries are allowed for safety
-    - A LIMIT clause will be added automatically for SELECT queries if not present
-    - Queries are validated before execution
-    """
-    # Validate the query first
     validation = validate_sql_query(request.query, allow_mutations=False)
     
     if not validation["valid"]:
@@ -228,18 +201,6 @@ async def run_validation_test(
     request: ValidationTestRequest,
     db: AsyncSession = Depends(get_target_db)
 ):
-    """
-    Run a complete validation test on a query.
-    
-    This will:
-    1. Validate the query syntax
-    2. Execute the original query and measure performance
-    3. Generate optimization recommendations using the ML system
-    4. If an optimized query is produced, execute it
-    5. Compare results to verify semantic equivalence
-    6. Calculate actual performance improvement
-    """
-    # Validate the query first
     validation = validate_sql_query(request.query, allow_mutations=False)
     
     if not validation["valid"]:
@@ -333,14 +294,6 @@ async def compare_queries(
     request: CompareQueriesRequest,
     db: AsyncSession = Depends(get_target_db)
 ):
-    """
-    Compare two queries side by side.
-    
-    Execute both queries and compare their results and performance.
-    Useful for manually testing different query variations.
-    Both queries are validated before execution.
-    """
-    # Validate query A
     validation_a = validate_sql_query(request.query_a, allow_mutations=False)
     if not validation_a["valid"]:
         return CompareQueriesResponse(
@@ -358,8 +311,7 @@ async def compare_queries(
             success=False,
             error=f"Invalid Query A: {validation_a['error']}"
         )
-    
-    # Validate query B
+
     validation_b = validate_sql_query(request.query_b, allow_mutations=False)
     if not validation_b["valid"]:
         return CompareQueriesResponse(
@@ -662,11 +614,6 @@ async def seed_test_data(
 async def list_test_tables(
     db: AsyncSession = Depends(get_target_db)
 ):
-    """
-    List available test tables in the target database.
-    
-    Returns table names, row counts, and column information.
-    """
     test_tables = ["categories", "products", "customers", "orders", "order_items"]
     tables_info = []
     
@@ -710,11 +657,6 @@ async def list_test_tables(
 
 @router.get("/sample-queries")
 async def get_sample_queries():
-    """
-    Get sample queries to test with the validation endpoints.
-    
-    Returns a list of example queries that work with the seeded test data.
-    """
     return {
         "simple_queries": [
             {

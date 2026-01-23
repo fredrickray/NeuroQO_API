@@ -31,6 +31,98 @@ router = APIRouter(prefix="/validation", tags=["Validation & Testing"])
 rewriter_service = QueryRewriterService()
 recommender = OptimizationRecommender()
 
+# Valid SQL statement keywords
+VALID_SQL_KEYWORDS = {"SELECT", "INSERT", "UPDATE", "DELETE", "WITH"}
+# Allowed keywords for read-only validation testing (safer)
+READ_ONLY_KEYWORDS = {"SELECT", "WITH"}
+# Dangerous keywords to block
+DANGEROUS_KEYWORDS = {"DROP", "TRUNCATE", "ALTER", "CREATE", "GRANT", "REVOKE", "EXEC", "EXECUTE"}
+
+
+def validate_sql_query(query: str, allow_mutations: bool = False) -> dict:
+    """
+    Validate that the input is a proper SQL query.
+    
+    Returns:
+        dict with 'valid' (bool), 'error' (str or None), and 'query_type' (str or None)
+    """
+    if not query or not query.strip():
+        return {
+            "valid": False,
+            "error": "Query cannot be empty",
+            "query_type": None
+        }
+    
+    # Clean and normalize the query
+    cleaned = query.strip()
+    
+    # Check minimum length (must be at least "SELECT 1" length)
+    if len(cleaned) < 8:
+        return {
+            "valid": False,
+            "error": "Query is too short to be a valid SQL statement",
+            "query_type": None
+        }
+    
+    # Get the first word (should be a SQL keyword)
+    first_word = cleaned.split()[0].upper() if cleaned.split() else ""
+    
+    # Check for dangerous keywords anywhere in the query
+    query_upper = cleaned.upper()
+    for dangerous in DANGEROUS_KEYWORDS:
+        # Check if the dangerous keyword appears as a standalone word
+        if f" {dangerous} " in f" {query_upper} " or query_upper.startswith(f"{dangerous} "):
+            return {
+                "valid": False,
+                "error": f"Query contains forbidden keyword '{dangerous}'. Only read operations are allowed for validation testing.",
+                "query_type": None
+            }
+    
+    # Check if query starts with a valid SQL keyword
+    allowed_keywords = VALID_SQL_KEYWORDS if allow_mutations else READ_ONLY_KEYWORDS
+    if first_word not in allowed_keywords:
+        allowed_list = ", ".join(sorted(allowed_keywords))
+        return {
+            "valid": False,
+            "error": f"Query must start with a valid SQL keyword ({allowed_list}). Got '{first_word}' instead.",
+            "query_type": None
+        }
+    
+    # Check for balanced parentheses
+    open_count = cleaned.count("(")
+    close_count = cleaned.count(")")
+    if open_count != close_count:
+        return {
+            "valid": False,
+            "error": f"Query has unbalanced parentheses: {open_count} opening and {close_count} closing",
+            "query_type": None
+        }
+    
+    # Check for balanced quotes (basic check)
+    single_quotes = cleaned.count("'")
+    if single_quotes % 2 != 0:
+        return {
+            "valid": False,
+            "error": "Query has unbalanced single quotes",
+            "query_type": None
+        }
+    
+    # Check that SELECT queries have FROM clause (unless it's a simple expression like SELECT 1)
+    if first_word == "SELECT":
+        # Allow simple expressions without FROM (e.g., SELECT 1, SELECT NOW())
+        has_from = " FROM " in query_upper or "\nFROM " in query_upper or "\tFROM " in query_upper
+        # Check if it's selecting from values or using expressions
+        is_simple_expression = not has_from and ("SELECT " in query_upper)
+        if not has_from and not is_simple_expression:
+            # More lenient: allow if there's no table reference pattern
+            pass  # Allow expressions like SELECT 1+1, SELECT CURRENT_DATE, etc.
+    
+    return {
+        "valid": True,
+        "error": None,
+        "query_type": first_word
+    }
+
 
 async def execute_query_with_timing(
     session: AsyncSession, 
@@ -99,9 +191,25 @@ async def execute_query(
     Returns the results with execution time measurements.
     Use this to test individual queries.
     
-    **Note**: A LIMIT clause will be added automatically for SELECT queries
-    if not present, for safety.
+    **Note**: 
+    - Only SELECT and WITH queries are allowed for safety
+    - A LIMIT clause will be added automatically for SELECT queries if not present
+    - Queries are validated before execution
     """
+    # Validate the query first
+    validation = validate_sql_query(request.query, allow_mutations=False)
+    
+    if not validation["valid"]:
+        return ExecuteQueryResponse(
+            query=request.query,
+            execution_time_ms=0,
+            row_count=0,
+            columns=[],
+            rows=[],
+            success=False,
+            error=validation["error"]
+        )
+    
     result = await execute_query_with_timing(db, request.query, request.limit)
     
     return ExecuteQueryResponse(
@@ -124,15 +232,29 @@ async def run_validation_test(
     Run a complete validation test on a query.
     
     This will:
-    1. Execute the original query and measure performance
-    2. Generate optimization recommendations using the ML system
-    3. If an optimized query is produced, execute it
-    4. Compare results to verify semantic equivalence
-    5. Calculate actual performance improvement
-    
-    This is the main endpoint for validating that optimizations work correctly.
+    1. Validate the query syntax
+    2. Execute the original query and measure performance
+    3. Generate optimization recommendations using the ML system
+    4. If an optimized query is produced, execute it
+    5. Compare results to verify semantic equivalence
+    6. Calculate actual performance improvement
     """
-    # Step 1: Execute original query
+    # Validate the query first
+    validation = validate_sql_query(request.query, allow_mutations=False)
+    
+    if not validation["valid"]:
+        return ValidationTestResponse(
+            original_query=request.query,
+            original_execution_time_ms=0,
+            original_row_count=0,
+            original_rows=[],
+            results_match=False,
+            improvement_percentage=0,
+            improvement_actual_ms=0,
+            success=False,
+            error=f"Invalid query: {validation['error']}"
+        )
+    
     original_result = await execute_query_with_timing(db, request.query, request.limit)
     
     if not original_result["success"]:
@@ -148,10 +270,8 @@ async def run_validation_test(
             error=f"Failed to execute original query: {original_result['error']}"
         )
     
-    # Step 2: Get optimization recommendations
     recommendations = recommender.recommend(request.query)
     
-    # Step 3: Try to rewrite the query
     rewrite_result = rewriter_service.rewrite(request.query)
     
     optimized_query = None
@@ -165,18 +285,15 @@ async def run_validation_test(
         optimized_query = rewrite_result.rewritten_query
         optimization_rules = [r.value for r in rewrite_result.rules_applied]
         
-        # Step 4: Execute optimized query if requested
         if request.run_optimized:
             optimized_result = await execute_query_with_timing(db, optimized_query, request.limit)
             
             if optimized_result["success"]:
-                # Step 5: Compare results
                 results_match = compare_results(
                     original_result["rows"], 
                     optimized_result["rows"]
                 )
                 
-                # Calculate improvement
                 original_time = original_result["execution_time_ms"]
                 optimized_time = optimized_result["execution_time_ms"]
                 
@@ -221,8 +338,46 @@ async def compare_queries(
     
     Execute both queries and compare their results and performance.
     Useful for manually testing different query variations.
+    Both queries are validated before execution.
     """
-    # Execute both queries
+    # Validate query A
+    validation_a = validate_sql_query(request.query_a, allow_mutations=False)
+    if not validation_a["valid"]:
+        return CompareQueriesResponse(
+            query_a=request.query_a,
+            query_a_time_ms=0,
+            query_a_rows=0,
+            query_a_results=[],
+            query_b=request.query_b,
+            query_b_time_ms=0,
+            query_b_rows=0,
+            query_b_results=[],
+            results_match=False,
+            improvement_percentage=0,
+            faster_query="equal",
+            success=False,
+            error=f"Invalid Query A: {validation_a['error']}"
+        )
+    
+    # Validate query B
+    validation_b = validate_sql_query(request.query_b, allow_mutations=False)
+    if not validation_b["valid"]:
+        return CompareQueriesResponse(
+            query_a=request.query_a,
+            query_a_time_ms=0,
+            query_a_rows=0,
+            query_a_results=[],
+            query_b=request.query_b,
+            query_b_time_ms=0,
+            query_b_rows=0,
+            query_b_results=[],
+            results_match=False,
+            improvement_percentage=0,
+            faster_query="equal",
+            success=False,
+            error=f"Invalid Query B: {validation_b['error']}"
+        )
+
     result_a = await execute_query_with_timing(db, request.query_a, request.limit)
     result_b = await execute_query_with_timing(db, request.query_b, request.limit)
     
@@ -260,10 +415,8 @@ async def compare_queries(
             error=f"Failed to execute Query B: {result_b['error']}"
         )
     
-    # Compare results
     results_match = compare_results(result_a["rows"], result_b["rows"])
     
-    # Calculate which is faster
     time_a = result_a["execution_time_ms"]
     time_b = result_b["execution_time_ms"]
     
@@ -298,18 +451,6 @@ async def seed_test_data(
     request: SeedDataRequest = SeedDataRequest(),
     db: AsyncSession = Depends(get_target_db)
 ):
-    """
-    Create test tables and seed with sample data.
-    
-    Creates the following tables in the target database:
-    - categories
-    - products
-    - customers
-    - orders
-    - order_items
-    
-    **WARNING**: If drop_existing is True (default), existing tables will be dropped!
-    """
     tables_created = []
     records_inserted = {}
     
@@ -321,7 +462,6 @@ async def seed_test_data(
                 await db.execute(text(f"DROP TABLE IF EXISTS {table} CASCADE"))
             await db.commit()
         
-        # Create categories table
         await db.execute(text("""
             CREATE TABLE IF NOT EXISTS categories (
                 id SERIAL PRIMARY KEY,
@@ -332,7 +472,6 @@ async def seed_test_data(
         """))
         tables_created.append("categories")
         
-        # Create products table
         await db.execute(text("""
             CREATE TABLE IF NOT EXISTS products (
                 id SERIAL PRIMARY KEY,
@@ -347,7 +486,6 @@ async def seed_test_data(
         """))
         tables_created.append("products")
         
-        # Create customers table
         await db.execute(text("""
             CREATE TABLE IF NOT EXISTS customers (
                 id SERIAL PRIMARY KEY,
@@ -360,7 +498,6 @@ async def seed_test_data(
         """))
         tables_created.append("customers")
         
-        # Create orders table
         await db.execute(text("""
             CREATE TABLE IF NOT EXISTS orders (
                 id SERIAL PRIMARY KEY,
@@ -373,7 +510,6 @@ async def seed_test_data(
         """))
         tables_created.append("orders")
         
-        # Create order_items table
         await db.execute(text("""
             CREATE TABLE IF NOT EXISTS order_items (
                 id SERIAL PRIMARY KEY,
@@ -387,7 +523,6 @@ async def seed_test_data(
         
         await db.commit()
         
-        # Seed categories
         categories = [
             ("Electronics", "Electronic devices and gadgets"),
             ("Clothing", "Apparel and fashion items"),
